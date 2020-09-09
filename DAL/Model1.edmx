@@ -1,0 +1,610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LibraryMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Author" Type="nvarchar" MaxLength="50" />
+          <Property Name="BookName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="50" />
+          <Property Name="Photo" Type="varbinary" MaxLength="50" />
+          <Property Name="IsReference" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddedDate" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblLibrarian">
+          <Key>
+            <PropertyRef Name="LibrarianID" />
+          </Key>
+          <Property Name="LibrarianID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>
+        <EntityType Name="tblStock">
+          <Key>
+            <PropertyRef Name="StockID" />
+          </Key>
+          <Property Name="StockID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BookID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="tblStudent">
+          <Key>
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="StudentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="RollNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Photo" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblUsers">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserType" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_tblLibrarian_tblUsers">
+          <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblLibrarian" Type="Self.tblLibrarian" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tblLibrarian">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblStock_tblBook">
+          <End Role="tblBook" Type="Self.tblBook" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblStock" Type="Self.tblStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="tblStock">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="addBook" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="author" Type="nvarchar" Mode="In" />
+          <Parameter Name="bookName" Type="nvarchar" Mode="In" />
+          <Parameter Name="isbn" Type="nvarchar" Mode="In" />
+          <Parameter Name="photo" Type="varbinary" Mode="In" />
+          <Parameter Name="isReference" Type="nvarchar" Mode="In" />
+          <Parameter Name="addedDate" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="addStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookID" Type="int" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+        </Function>
+        <Function Name="addStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FullName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Gender" Type="nvarchar" Mode="In" />
+          <Parameter Name="RollNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="Photo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+          <Parameter Name="userType" Type="nvarchar" Mode="In" />
+          <Parameter Name="fullName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="deleteBook" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="deleteStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StudentID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getBookByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getBooks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getStudentByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="studentID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="updateBook" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookID" Type="int" Mode="In" />
+          <Parameter Name="author" Type="nvarchar" Mode="In" />
+          <Parameter Name="bookName" Type="nvarchar" Mode="In" />
+          <Parameter Name="isbn" Type="nvarchar" Mode="In" />
+          <Parameter Name="photo" Type="nvarchar" Mode="In" />
+          <Parameter Name="isReference" Type="nvarchar" Mode="In" />
+          <Parameter Name="addedDate" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="updateStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookID" Type="int" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+        </Function>
+        <Function Name="updateStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StudentID" Type="int" Mode="In" />
+          <Parameter Name="FullName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Gender" Type="nvarchar" Mode="In" />
+          <Parameter Name="RollNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="Photo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userID" Type="int" Mode="In" />
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+          <Parameter Name="userType" Type="nvarchar" Mode="In" />
+          <Parameter Name="fullName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="verifyUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+          <Parameter Name="userType" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="LibraryMSModelStoreContainer">
+          <EntitySet Name="tblBook" EntityType="Self.tblBook" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblLibrarian" EntityType="Self.tblLibrarian" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStock" EntityType="Self.tblStock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStudent" EntityType="Self.tblStudent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblLibrarian_tblUsers" Association="Self.FK_tblLibrarian_tblUsers">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblLibrarian" EntitySet="tblLibrarian" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblStock_tblBook" Association="Self.FK_tblStock_tblBook">
+            <End Role="tblBook" EntitySet="tblBook" />
+            <End Role="tblStock" EntitySet="tblStock" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BookName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Photo" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="IsReference" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddedDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblStocks" Relationship="Self.FK_tblStock_tblBook" FromRole="tblBook" ToRole="tblStock" />
+        </EntityType>
+        <EntityType Name="tblLibrarian">
+          <Key>
+            <PropertyRef Name="LibrarianID" />
+          </Key>
+          <Property Name="LibrarianID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK_tblLibrarian_tblUsers" FromRole="tblLibrarian" ToRole="tblUsers" />
+        </EntityType>
+        <EntityType Name="tblStock">
+          <Key>
+            <PropertyRef Name="StockID" />
+          </Key>
+          <Property Name="StockID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BookID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <NavigationProperty Name="tblBook" Relationship="Self.FK_tblStock_tblBook" FromRole="tblStock" ToRole="tblBook" />
+        </EntityType>
+        <EntityType Name="tblStudent">
+          <Key>
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="StudentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RollNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Photo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblLibrarians" Relationship="Self.FK_tblLibrarian_tblUsers" FromRole="tblUsers" ToRole="tblLibrarian" />
+        </EntityType>
+        <Association Name="FK_tblStock_tblBook">
+          <End Role="tblBook" Type="Self.tblBook" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblStock" Type="Self.tblStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="tblStock">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblLibrarian_tblUsers">
+          <End Role="tblUsers" Type="Self.tblUser" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblLibrarian" Type="Self.tblLibrarian" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tblLibrarian">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblBooks" EntityType="Self.tblBook" />
+          <EntitySet Name="tblLibrarians" EntityType="Self.tblLibrarian" />
+          <EntitySet Name="tblStocks" EntityType="Self.tblStock" />
+          <EntitySet Name="tblStudents" EntityType="Self.tblStudent" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <AssociationSet Name="FK_tblStock_tblBook" Association="Self.FK_tblStock_tblBook">
+            <End Role="tblBook" EntitySet="tblBooks" />
+            <End Role="tblStock" EntitySet="tblStocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblLibrarian_tblUsers" Association="Self.FK_tblLibrarian_tblUsers">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblLibrarian" EntitySet="tblLibrarians" />
+          </AssociationSet>
+          <FunctionImport Name="addBook">
+            <Parameter Name="author" Mode="In" Type="String" />
+            <Parameter Name="bookName" Mode="In" Type="String" />
+            <Parameter Name="isbn" Mode="In" Type="String" />
+            <Parameter Name="photo" Mode="In" Type="Binary" />
+            <Parameter Name="isReference" Mode="In" Type="String" />
+            <Parameter Name="addedDate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="addStock">
+            <Parameter Name="bookID" Mode="In" Type="Int32" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="addStudent">
+            <Parameter Name="FullName" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="String" />
+            <Parameter Name="RollNo" Mode="In" Type="String" />
+            <Parameter Name="PhoneNo" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Photo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddUser">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="userType" Mode="In" Type="String" />
+            <Parameter Name="fullName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteBook">
+            <Parameter Name="bookID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="deleteStudent">
+            <Parameter Name="StudentID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteUser">
+            <Parameter Name="userID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getBookByID" ReturnType="Collection(LibraryMSModel.getBookByID_Result)">
+            <Parameter Name="bookID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getBooks" ReturnType="Collection(LibraryMSModel.getBooks_Result)" />
+          <FunctionImport Name="getStock" ReturnType="Collection(LibraryMSModel.getStock_Result)">
+            <Parameter Name="bookID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getStudent" ReturnType="Collection(LibraryMSModel.getStudent_Result)" />
+          <FunctionImport Name="getStudentByID" ReturnType="Collection(LibraryMSModel.getStudentByID_Result)">
+            <Parameter Name="studentID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetUsers" ReturnType="Collection(LibraryMSModel.GetUsers_Result)" />
+          <FunctionImport Name="updateBook">
+            <Parameter Name="bookID" Mode="In" Type="Int32" />
+            <Parameter Name="author" Mode="In" Type="String" />
+            <Parameter Name="bookName" Mode="In" Type="String" />
+            <Parameter Name="isbn" Mode="In" Type="String" />
+            <Parameter Name="photo" Mode="In" Type="String" />
+            <Parameter Name="isReference" Mode="In" Type="String" />
+            <Parameter Name="addedDate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateStock">
+            <Parameter Name="bookID" Mode="In" Type="Int32" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateStudent">
+            <Parameter Name="StudentID" Mode="In" Type="Int32" />
+            <Parameter Name="FullName" Mode="In" Type="String" />
+            <Parameter Name="Gender" Mode="In" Type="String" />
+            <Parameter Name="RollNo" Mode="In" Type="String" />
+            <Parameter Name="PhoneNo" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Photo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateUser">
+            <Parameter Name="userID" Mode="In" Type="Int32" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="userType" Mode="In" Type="String" />
+            <Parameter Name="fullName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="verifyUser" ReturnType="Collection(LibraryMSModel.verifyUser_Result)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="userType" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="getBookByID_Result">
+          <Property Type="Int32" Name="BookID" Nullable="false" />
+          <Property Type="String" Name="Author" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BookName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ISBN" Nullable="true" MaxLength="50" />
+          <Property Type="Binary" Name="Photo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="IsReference" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="AddedDate" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="getBooks_Result">
+          <Property Type="Int32" Name="BookID" Nullable="false" />
+          <Property Type="String" Name="Author" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BookName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ISBN" Nullable="true" MaxLength="50" />
+          <Property Type="Binary" Name="Photo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="IsReference" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="AddedDate" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="getStock_Result">
+          <Property Type="Int32" Name="StockID" Nullable="false" />
+          <Property Type="Int32" Name="BookID" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getStudent_Result">
+          <Property Type="Int32" Name="StudentID" Nullable="false" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RollNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Photo" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="getStudentByID_Result">
+          <Property Type="Int32" Name="StudentID" Nullable="false" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RollNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PhoneNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Photo" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetUsers_Result">
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="verifyUser_Result">
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibraryMSModelStoreContainer" CdmEntityContainer="LibraryMSEntities">
+          <EntitySetMapping Name="tblBooks">
+            <EntityTypeMapping TypeName="LibraryMSModel.tblBook">
+              <MappingFragment StoreEntitySet="tblBook">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="IsReference" ColumnName="IsReference" />
+                <ScalarProperty Name="AddedDate" ColumnName="AddedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblLibrarians">
+            <EntityTypeMapping TypeName="LibraryMSModel.tblLibrarian">
+              <MappingFragment StoreEntitySet="tblLibrarian">
+                <ScalarProperty Name="LibrarianID" ColumnName="LibrarianID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStocks">
+            <EntityTypeMapping TypeName="LibraryMSModel.tblStock">
+              <MappingFragment StoreEntitySet="tblStock">
+                <ScalarProperty Name="StockID" ColumnName="StockID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStudents">
+            <EntityTypeMapping TypeName="LibraryMSModel.tblStudent">
+              <MappingFragment StoreEntitySet="tblStudent">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="LibraryMSModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUsers">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="addBook" FunctionName="LibraryMSModel.Store.addBook" />
+          <FunctionImportMapping FunctionImportName="addStock" FunctionName="LibraryMSModel.Store.addStock" />
+          <FunctionImportMapping FunctionImportName="addStudent" FunctionName="LibraryMSModel.Store.addStudent" />
+          <FunctionImportMapping FunctionImportName="AddUser" FunctionName="LibraryMSModel.Store.AddUser" />
+          <FunctionImportMapping FunctionImportName="deleteBook" FunctionName="LibraryMSModel.Store.deleteBook" />
+          <FunctionImportMapping FunctionImportName="deleteStudent" FunctionName="LibraryMSModel.Store.deleteStudent" />
+          <FunctionImportMapping FunctionImportName="DeleteUser" FunctionName="LibraryMSModel.Store.DeleteUser" />
+          <FunctionImportMapping FunctionImportName="getBookByID" FunctionName="LibraryMSModel.Store.getBookByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.getBookByID_Result">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="IsReference" ColumnName="IsReference" />
+                <ScalarProperty Name="AddedDate" ColumnName="AddedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getBooks" FunctionName="LibraryMSModel.Store.getBooks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.getBooks_Result">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="IsReference" ColumnName="IsReference" />
+                <ScalarProperty Name="AddedDate" ColumnName="AddedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getStock" FunctionName="LibraryMSModel.Store.getStock">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.getStock_Result">
+                <ScalarProperty Name="StockID" ColumnName="StockID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getStudent" FunctionName="LibraryMSModel.Store.getStudent">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.getStudent_Result">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getStudentByID" FunctionName="LibraryMSModel.Store.getStudentByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.getStudentByID_Result">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetUsers" FunctionName="LibraryMSModel.Store.GetUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.GetUsers_Result">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updateBook" FunctionName="LibraryMSModel.Store.updateBook" />
+          <FunctionImportMapping FunctionImportName="updateStock" FunctionName="LibraryMSModel.Store.updateStock" />
+          <FunctionImportMapping FunctionImportName="updateStudent" FunctionName="LibraryMSModel.Store.updateStudent" />
+          <FunctionImportMapping FunctionImportName="UpdateUser" FunctionName="LibraryMSModel.Store.UpdateUser" />
+          <FunctionImportMapping FunctionImportName="verifyUser" FunctionName="LibraryMSModel.Store.verifyUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryMSModel.verifyUser_Result">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
